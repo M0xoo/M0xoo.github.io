@@ -21,7 +21,10 @@ rows = []
 for it in items:
     date = parsedate_to_datetime(it.findtext("pubDate")).strftime("%b %Y").lower()
     title = html.escape(it.findtext("title").strip())
-    link = html.escape(it.findtext("link").split("?")[0])
+    raw = it.findtext("link").split("?")[0]
+    if not raw.startswith("https://"):
+        continue
+    link = html.escape(raw)
     rows.append(f'<div class="row"><span class="m">{date}</span><a href="{link}">{title}</a></div>')
 
 src = INDEX.read_text()
